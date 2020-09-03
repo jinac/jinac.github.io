@@ -1,0 +1,106 @@
+baseURL = "http://jinac.github.io/"
+languageCode = "en-us"
+title = "John Inacay"
+theme = "personal-web"
+copyright="© John Inacay"
+googleAnalytics = ""
+enableEmoji=true
+enableRobotsTXT=true
+pygmentsUseClasses=true
+pygmentsCodeFences=true
+
+[params.intro]
+  main = "John Inacay"
+  sub = "Computer Vision and Machine Learning Engineer, Composer and Multi-Instrumentalist"
+
+
+[params.main]
+  latestPublishHeader = "My Latest Post"
+
+[taxonomies]
+  design = "designs"
+  tech = "techs"
+
+[blackfriday]
+  hrefTargetBlank = true
+
+[params]
+  breadcrumb = true
+  accentColor = "#FD3519"
+  mainSections = ['post'] # values: ['post', 'portfolio'] only accept one section, to be displayed bellow 404
+
+[params.notFound]
+  gopher = "/images/gopher.png" # checkout https://gopherize.me/
+  h1 = 'Bummer!'
+  p = "It seems that this page doesn't exist."
+
+[params.sections]
+  # Define how your sections will be called
+  # when automatically pulled. For instance in the 404 page
+  post = "article"
+
+[params.sidebar]
+  backgroundImage = '/images/Background.jpg'
+  gradientOverlay = '' # default: rgba(0,0,0,0.4),rgba(0,0,0,0.4)
+  logo = "/images/Profile.jpeg"
+[params.assets]
+  favicon = ""
+  customCSS = ""
+
+[params.social]
+  github = "https://github.com/jinac"
+  twitter = "https://twitter.com/jincfunk"
+  linkedin = "https://www.linkedin.com/in/john-inacay-94356646/"
+  medium = "https://medium.com/@jdevinacay"
+  # youtube = "https://www.youtube.com/"
+
+[params.contact]
+  email = ""
+  text= "" # text of the contact link in the sidebar. If email params.contact.email is defined
+
+
+[menu]
+
+[[menu.main]]
+  identifier = "about"
+  name = "About"
+  title = "About section"
+  url = "/about/"
+  weight = -120
+
+[[menu.main]]
+  identifier = "music"
+  name = "Music"
+  title = "Music section"
+  url = "/music/"
+  weight = -110
+
+[[menu.main]]
+  identifier = "resume"
+  name = "Resume"
+  title = "Resume section"
+  url = "/resume/"
+  weight = -100
+
+[[menu.main]]
+  identifier = "blog"
+  name = "Post"
+  title = "Blog section"
+  url = "/post/"
+  weight = -90
+
+[sitemap]
+  changefreq = "monthly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+[privacy]
+  [privacy.googleAnalytics]
+    anonymizeIP = true
+    disable = true
+    respectDoNotTrack = true
+    useSessionStorage = false
+  [privacy.twitter]
+    disable = false
+    enableDNT = true
+    simple = false
