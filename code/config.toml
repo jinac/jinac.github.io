@@ -1,4 +1,4 @@
-baseURL = "http://jinac.github.io/"
+baseURL = "https://jinac.github.io/"
 languageCode = "en-us"
 title = "John Inacay"
 theme = "personal-web"
