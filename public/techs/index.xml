@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Techs on John Inacay</title>
+    <link>http://jinac.github.io/techs/</link>
+    <description>Recent content in Techs on John Inacay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© John Inacay</copyright>
+    
+	<atom:link href="http://jinac.github.io/techs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+  </channel>
+</rss>

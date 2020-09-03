@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Resume on John Inacay</title>
+    <link>http://jinac.github.io/resume/</link>
+    <description>Recent content in Resume on John Inacay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© John Inacay</copyright>
+    <lastBuildDate>Thu, 03 Sep 2020 01:08:23 -0700</lastBuildDate>
+    
+	<atom:link href="http://jinac.github.io/resume/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+  </channel>
+</rss>
