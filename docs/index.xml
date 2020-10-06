@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© John Inacay</copyright>
-    <lastBuildDate>Thu, 03 Sep 2020 01:17:05 -0700</lastBuildDate>
+    <lastBuildDate>Sun, 04 Oct 2020 21:32:29 -0700</lastBuildDate>
     
 	<atom:link href="https://jinac.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Adapting the Superpoint Pytorch Model for OAK-1</title>
+      <link>https://jinac.github.io/post/2/</link>
+      <pubDate>Sun, 04 Oct 2020 21:32:29 -0700</pubDate>
+      
+      <guid>https://jinac.github.io/post/2/</guid>
+      <description>Introduction (Motivation, explain superpoint, codebase link) Deep learning model deployment doesn&amp;rsquo;t end with the training of a model. Especially with edge devices and the variety of processors, there can be many steps to get a network running on an embedded device. With the OpenCV AI Kit, I have camera modules with a Myriad X chip on the same board. It is a module well-suited for deep learning inference with what should be minimal bottleneck of image data transfer.</description>
+    </item>
     
     <item>
       <title>What are Transformers?</title>
