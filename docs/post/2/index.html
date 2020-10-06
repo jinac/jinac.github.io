@@ -30,7 +30,7 @@
 <meta itemprop="description" content="Tutorial for OpenVINO Chain Model Conversion">
 <meta itemprop="datePublished" content="2020-10-04T21:32:29-07:00" />
 <meta itemprop="dateModified" content="2020-10-04T21:32:29-07:00" />
-<meta itemprop="wordCount" content="1145">
+<meta itemprop="wordCount" content="1140">
 
 
 
@@ -190,13 +190,14 @@
 </div>
 
 <h1 id="introduction">Introduction</h1>
-<p>(Motivation, explain superpoint, codebase link)
-Deep learning model deployment doesn&rsquo;t end with the training of a model. Especially with edge devices and the variety of processors, there can be many steps to get a network running on an embedded device. With the <a href="https://opencv.org/introducing-oak-spatial-ai-powered-by-opencv/">OpenCV AI Kit</a>, I have camera modules with a Myriad X chip on the same board. It is a module well-suited for deep learning inference with what should be minimal bottleneck of image data transfer.
-I now have an OAK-1 (well, an earlier run MegaAI module), and I want to familiarize myself with the device. While the <a href="https://docs.luxonis.com/">docs</a> from the designers of the OAK-1 Luxonis show they have a model zoo, I am more interested in how to use your own networks with the device. Considering its design, the OAK devices are most suited for inference directly on image with minimal (if any) pre-processing. Tasks like keypoint and descriptor extraction (like <a href="https://github.com/magicleap/SuperPointPretrainedNetwork">Superpoint</a>) and object detection (like <a href="https://pjreddie.com/darknet/yolo/">YOLO</a>) are good candidates for tasks to be taken up on this module. Since YOLO is already supported in the model zoo, I&rsquo;ve gone through the steps of converting the pretrained pytorch Superpoint network to the Movidius Blob format for the Myriad X. Because not all architectures of networks are the same or even originate from the same framework, this does not illustrate the process of adapting all models. I will discuss some considerations you may need to make, but YMMV!</p>
+<p>Deep learning model deployment doesn&rsquo;t end with the training of a model. Especially with edge devices and the variety of processors, there can be many steps to get a network running on an embedded device. With the <a href="https://opencv.org/introducing-oak-spatial-ai-powered-by-opencv/">OpenCV AI Kit</a>, I have camera modules with a Myriad X chip on the same board. It is a module well-suited for deep learning inference with what should be minimal bottleneck of image data transfer.</p>
+<p><img src="/post/images/2-1.jpg" alt="My OAK-1">
+I now have an OAK-1 (well, an earlier run MegaAI module), and I want to familiarize myself with the device. While the <a href="https://docs.luxonis.com/">docs</a> from the designers of the OAK-1 Luxonis show they have a model zoo, I am more interested in how to use your own networks with the device. Considering its design, the OAK devices are most suited for inference directly on image with minimal (if any) pre-processing. Tasks like keypoint and descriptor extraction (like <a href="https://github.com/magicleap/SuperPointPretrainedNetwork">Superpoint</a>) and object detection (like <a href="https://pjreddie.com/darknet/yolo/">YOLO</a>) are good candidates for tasks to be taken up on this module. Since YOLO is already supported in the model zoo, I&rsquo;ve gone through the steps of converting the pretrained pytorch Superpoint network to the Movidius Blob format for the Myriad X. Because not all architectures of networks are the same or even originate from the same framework, this does not illustrate the process of adapting all models. I will discuss some considerations you may need to make, but YMMV!
+<img src="/post/images/2-2.jpg" alt="Also my OAK-1"></p>
 <h1 id="conversion-process">Conversion Process</h1>
-<p>My code for performing all these steps can be found in my (github repo)[https://github.com/jinac/superpoint_infer_engine], but I&rsquo;ll put snippets here.</p>
+<p>My code for performing all these steps can be found in my <a href="https://github.com/jinac/superpoint_infer_engine">github repo</a>, but I&rsquo;ll put snippets here.</p>
 <h2 id="prerequisites-and-considerations">Prerequisites and Considerations</h2>
-<p>Since the Myriad X is the target, you first need to install the Intel (OpenVINO Toolkit)[https://docs.openvinotoolkit.org/latest/index.html]. At the time of writing, you should use version 2020.1 or 2020.2, especially if you&rsquo;re planning to use the DepthAI python library to use the OAK device.
+<p>Since the Myriad X is the target, you first need to install the Intel <a href="https://docs.openvinotoolkit.org/latest/index.html">OpenVINO Toolkit</a>. At the time of writing, you should use version 2020.1 or 2020.2, especially if you&rsquo;re planning to use the DepthAI python library to use the OAK device.
 Assuming one has already has a pretrained model or will be training a model, there some things to be aware of that will affect the amount of work in later steps. You should be aware of the following:</p>
 <h3 id="1-check-on-layer-compatibility-for-each-intermediate-step">1. Check on layer compatibility for each intermediate step.</h3>
 <p>Layers may be incompatible or not have an implementatino between different conversion steps. In this work, I removed some incompatible layers in the ONNX conversion step and re-implemented them in numpy. When converting from ONNX to IR, you may face more layers that are not implemented. When you can&rsquo;t run the full model on the OAK device due to incompatibile layers, you could:</p>
@@ -209,7 +210,7 @@ Assuming one has already has a pretrained model or will be training a model, the
 <p>The Myriad X is for inference, but it&rsquo;s still a more limited resource than your desktop or server GPU. Figure out what adjustments you can make (i.e. batch size, input resolution, etc.) and tune these parameters when training or converting models to sufficiently run on the Myriad X</p>
 <h2 id="convert-pytorch-model-to-onnx">Convert Pytorch Model to ONNX</h2>
 <p>The first step is to convert the pytorch model to ONNX as an intermediate representation. Intel&rsquo;s IR models do not have a direct conversion from pytorch, but they do have conversion tooling from ONNX. As mentioned earlier, some layers or operations may not be supported in the conversion to ONNX. While Superpoint is mostly a CNN, the l2-norm is not implemented in ONNX. It&rsquo;s used as a final operation on the coarse descriptor output, so I just re-implement it and absorb it into the post-processing of the model output that happens in superpoint_frontend.py.</p>
-<p>The pytorch library already supports conversion to onnx. Part of the (conversion script)[https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py] is reproduced below to show the relevant steps. Of note, the opset_version should be 10 for the supported OpenVINO versions at the time of writing.</p>
+<p>The pytorch library already supports conversion to onnx. Part of the <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py">conversion script</a> is reproduced below to show the relevant steps. Of note, the opset_version should be 10 for the supported OpenVINO versions at the time of writing.</p>
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">import numpy as np
 import torch
 
@@ -258,7 +259,7 @@ torch.onnx.export(pt_model,               # model being run
 <p>Finally, I can now get our model in the Myriad X format.</p>
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">/opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/myriad_compile -m output/superpoint_100x100.xml -o output/superpoint_100x100.blob -ip U8 -VPU_MYRIAD_PLATFORM VPU_MYRIAD_2480 -VPU_NUMBER_OF_SHAVES 4 -VPU_NUMBER_OF_CMX_SLICES 4
 # Output model to &#34;output/superpoint_100x100.blob&#34;
-</code></pre></div><p>You also will need json file called &ldquo;superpoint_100x100.json&rdquo; for the OAK device DepthAI api to use the model. This is automated in (onnx conversion script)[https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py]. This json file defines the output tensors of the model for parsing (but multiple output tensors may require more involved processing, see (run_oak.py)[https://github.com/jinac/superpoint_infer_engine/blob/master/run_oak.py] for an example).</p>
+</code></pre></div><p>You also will need json file called &ldquo;superpoint_100x100.json&rdquo; for the OAK device DepthAI api to use the model. This is automated in <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py">onnx conversion script</a>. This json file defines the output tensors of the model for parsing (but multiple output tensors may require more involved processing, see <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/run_oak.py">run_oak.py</a> for an example).</p>
 <p>superpoint_100x100.json</p>
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">{
     &#34;tensors&#34;:
