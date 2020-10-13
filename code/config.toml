@@ -9,6 +9,7 @@ enableRobotsTXT=true
 pygmentsUseClasses=true
 pygmentsCodeFences=true
 publishDir = "../docs"
+custom_css = ["/static/override.css"]
 
 [params.intro]
   main = "John Inacay"

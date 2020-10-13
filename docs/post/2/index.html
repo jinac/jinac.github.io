@@ -30,7 +30,7 @@
 <meta itemprop="description" content="Tutorial for OpenVINO Chain Model Conversion">
 <meta itemprop="datePublished" content="2020-10-04T21:32:29-07:00" />
 <meta itemprop="dateModified" content="2020-10-04T21:32:29-07:00" />
-<meta itemprop="wordCount" content="1237">
+<meta itemprop="wordCount" content="1244">
 
 
 
@@ -46,7 +46,7 @@
   <div class="intro">
     <div class="logo-container">
       <a href="/">
-        <img src='https://jinac.github.io/images/Profile.jpeg' alt="Profile About" class="rounded-logo">
+        <img src='https://jinac.github.io/images/Profile.jpeg' alt="Profile HOME" class="rounded-logo">
       </a>
     </div>
     <h2>John Inacay</h2>
@@ -191,9 +191,21 @@
 
 <h1 id="introduction">Introduction</h1>
 <p>Deep learning model deployment doesn&rsquo;t end with the training of a model. Especially with edge devices and the variety of processors, there can be many steps to get a network running on an embedded device. With the <a href="https://opencv.org/introducing-oak-spatial-ai-powered-by-opencv/">OpenCV AI Kit</a>, I have camera modules with a Myriad X chip on the same board. It is a module well-suited for deep learning inference with what should be minimal bottleneck of image data transfer.</p>
-<p><img src="/post/images/2-1.jpg" alt="My OAK-1">
-I now have an OAK-1 (well, an earlier run MegaAI module), and I want to familiarize myself with the device. While the <a href="https://docs.luxonis.com/">docs</a> from the designers of the OAK-1 Luxonis show they have a model zoo, I am more interested in how to use your own networks with the device. Considering its design, the OAK devices are most suited for inference directly on image with minimal (if any) pre-processing. Tasks like keypoint and descriptor extraction (like <a href="https://github.com/magicleap/SuperPointPretrainedNetwork">Superpoint</a>) and object detection (like <a href="https://pjreddie.com/darknet/yolo/">YOLO</a>) are good candidates for tasks to be taken up on this module. Since YOLO is already supported in the model zoo, I&rsquo;ve gone through the steps of converting the pretrained pytorch Superpoint network to the Movidius Blob format for the Myriad X. Because not all architectures of networks are the same or even originate from the same framework, this does not illustrate the process of adapting all models. I will discuss some considerations you may need to make, but YMMV!
-<img src="/post/images/2-2.jpg" alt="Also my OAK-1"></p>
+<figure>
+    <img src="/post/images/2-1.jpg"
+         alt="My OAK-1"/> <figcaption>
+            <p>My OAK-1</p>
+        </figcaption>
+</figure>
+
+<p>I now have an OAK-1 (well, an earlier run MegaAI module), and I want to familiarize myself with the device. While the <a href="https://docs.luxonis.com/">docs</a> from the designers of the OAK-1 Luxonis show they have a model zoo, I am more interested in how to use your own networks with the device. Considering its design, the OAK devices are most suited for inference directly on image with minimal (if any) pre-processing. Tasks like keypoint and descriptor extraction (like <a href="https://github.com/magicleap/SuperPointPretrainedNetwork">Superpoint</a>) and object detection (like <a href="https://pjreddie.com/darknet/yolo/">YOLO</a>) are good candidates for tasks to be taken up on this module. Since YOLO is already supported in the model zoo, I&rsquo;ve gone through the steps of converting the pretrained pytorch Superpoint network to the Movidius Blob format for the Myriad X. Because not all architectures of networks are the same or even originate from the same framework, this does not illustrate the process of adapting all models. I will discuss some considerations you may need to make, but YMMV!</p>
+<figure>
+    <img src="/post/images/2-2.jpg"
+         alt="Also my OAK-1"/> <figcaption>
+            <p>Also my OAK-1</p>
+        </figcaption>
+</figure>
+
 <h1 id="conversion-process">Conversion Process</h1>
 <p>My code for performing all these steps can be found in my <a href="https://github.com/jinac/superpoint_infer_engine">github repo</a>, but I&rsquo;ll put snippets here.</p>
 <h2 id="prerequisites-and-considerations">Prerequisites and Considerations</h2>
@@ -211,80 +223,86 @@ Assuming one has already has a pretrained model or will be training a model, the
 <h2 id="convert-pytorch-model-to-onnx">Convert Pytorch Model to ONNX</h2>
 <p>The first step is to convert the pytorch model to ONNX as an intermediate representation. Intel&rsquo;s IR models do not have a direct conversion from pytorch, but they do have conversion tooling from ONNX. As mentioned earlier, some layers or operations may not be supported in the conversion to ONNX. While Superpoint is mostly a CNN, the l2-norm is not implemented in ONNX. It&rsquo;s used as a final operation on the coarse descriptor output, so I just re-implement it and absorb it into the post-processing of the model output that happens in superpoint_frontend.py.</p>
 <p>The pytorch library already supports conversion to onnx. Part of the <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py">conversion script</a> is reproduced below to show the relevant steps. Of note, the opset_version should be 10 for the supported OpenVINO versions at the time of writing.</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">import numpy as np
-import torch
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
 
-import network
-from superpoint_frontend import reduce_l2
+<span class="kn">import</span> <span class="nn">network</span>
+<span class="kn">from</span> <span class="nn">superpoint_frontend</span> <span class="kn">import</span> <span class="n">reduce_l2</span>
 
-weights_path = &#39;weights/superpoint_v1.pth&#39;
-h = 100  # height of input image in pixels
-w = 100  # width of input image in pixels
+<span class="n">weights_path</span> <span class="o">=</span> <span class="s1">&#39;weights/superpoint_v1.pth&#39;</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># height of input image in pixels</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># width of input image in pixels</span>
 
-# Create model object.
-pt_model = network.SuperPointNet()
-pytorch_total_params = sum(p.numel() for p in pt_model.parameters())
-print(&#39;Total number of params: &#39;, pytorch_total_params)
+<span class="c1"># Create model object.</span>
+<span class="n">pt_model</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">SuperPointNet</span><span class="p">()</span>
+<span class="n">pytorch_total_params</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pt_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Total number of params: &#39;</span><span class="p">,</span> <span class="n">pytorch_total_params</span><span class="p">)</span>
 
-# Initialize model with the pretrained weights
-map_location = lambda storage, loc: storage
-if torch.cuda.is_available():
-  map_location = None
-pt_model.load_state_dict(torch.load(weights_path, map_location=map_location))
-pt_model.eval()
+<span class="c1"># Initialize model with the pretrained weights</span>
+<span class="n">map_location</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">storage</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="n">storage</span>
+<span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+  <span class="n">map_location</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">pt_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">map_location</span><span class="p">))</span>
+<span class="n">pt_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-# Create random input and run on model for onnx trace.
-x = torch.randn(batch_size, 1, h, w, requires_grad=True)
-torch_out = pt_model(x)
+<span class="c1"># Create random input and run on model for onnx trace.</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">torch_out</span> <span class="o">=</span> <span class="n">pt_model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-# Export the model
-onnx_filename = os.path.join(output_dir, &#34;superpoint_{}x{}.onnx&#34;.format(h, w))
-torch.onnx.export(
-  pt_model,               # model being run
-  x,                         # model input (or a tuple for multiple inputs)
-  onnx_filename,   # where to save the model (can be a file or file-like object)
-  export_params=True,        # store the trained parameter weights inside the model file
-  opset_version=10,          # the ONNX version to export the model to
-  do_constant_folding=True,  # whether to execute constant folding for optimization
-  input_names = [&#39;input&#39;],   # the model&#39;s input names
-  output_names = [&#39;semi&#39;, &#39;desc&#39;], # the model&#39;s output names
-  )
-# Output ONNX model is saved to &#34;output/superpoint_100x100.onnx&#34;, expecting an input image of [1,1,100,100]
+<span class="c1"># Export the model</span>
+<span class="n">onnx_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&#34;superpoint_{}x{}.onnx&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">onnx</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+  <span class="n">pt_model</span><span class="p">,</span>               <span class="c1"># model being run</span>
+  <span class="n">x</span><span class="p">,</span>                         <span class="c1"># model input (or a tuple for multiple inputs)</span>
+  <span class="n">onnx_filename</span><span class="p">,</span>   <span class="c1"># where to save the model (can be a file or file-like object)</span>
+  <span class="n">export_params</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>        <span class="c1"># store the trained parameter weights inside the model file</span>
+  <span class="n">opset_version</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>          <span class="c1"># the ONNX version to export the model to</span>
+  <span class="n">do_constant_folding</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="c1"># whether to execute constant folding for optimization</span>
+  <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span>   <span class="c1"># the model&#39;s input names</span>
+  <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;semi&#39;</span><span class="p">,</span> <span class="s1">&#39;desc&#39;</span><span class="p">],</span> <span class="c1"># the model&#39;s output names</span>
+  <span class="p">)</span>
+<span class="c1"># Output ONNX model is saved to &#34;output/superpoint_100x100.onnx&#34;, expecting an input image of [1,1,100,100]</span>
 </code></pre></div><h2 id="convert-onnx-model-to-intel-intermediate-representation-ir">Convert ONNX Model to Intel Intermediate Representation (IR)</h2>
 <p>Now that I have an ONNX model, I need to convert it to Intel&rsquo;s IR. This IR can be used as is if targeting other devices and will serve as the input to a final step of converting to the Movidius Blob to be run on the Myriad X. I will use the OpenVINO model optimizer tools. Assuming OpenVINO is installed in /opt/intel/openvino, the following script would need to be run:</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">python3 /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_shape [1,1,100,100] --input_model output/superpoint_100x100.onnx --output_dir output --data_type FP16
-# FP16 data type is due to the Myriad X expecting weights and layers to be fp16 ops
-# Output model file (superpoint_100x100.xml) and weights file (superpoint100x100.bin) to directory &#34;output/&#34;
-</code></pre></div><p>We have <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/run_openvino.py">an example script</a> to use this model. We should expect an output like this:
-<img src="/post/images/2-3.gif" alt="run_openvino.py example output"></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">python3 /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_shape <span class="o">[</span>1,1,100,100<span class="o">]</span> --input_model output/superpoint_100x100.onnx --output_dir output --data_type FP16
+<span class="c1"># FP16 data type is due to the Myriad X expecting weights and layers to be fp16 ops</span>
+<span class="c1"># Output model file (superpoint_100x100.xml) and weights file (superpoint100x100.bin) to directory &#34;output/&#34;</span>
+</code></pre></div><p>We have <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/run_openvino.py">an example script</a> to use this model. We should expect an output like this:</p>
+<figure>
+    <img src="/post/images/2-3.gif"
+         alt="run_openvino.py output"/> <figcaption>
+            <p>run_openvino.py output</p>
+        </figcaption>
+</figure>
+
 <h2 id="generate-intel-ir-to-movidius-blob">Generate Intel IR to Movidius Blob</h2>
 <p>Finally, I can now get our model in the Myriad X format.</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">/opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/myriad_compile -m output/superpoint_100x100.xml -o output/superpoint_100x100.blob -ip U8 -VPU_MYRIAD_PLATFORM VPU_MYRIAD_2480 -VPU_NUMBER_OF_SHAVES 4 -VPU_NUMBER_OF_CMX_SLICES 4
-# Output model to &#34;output/superpoint_100x100.blob&#34;
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/myriad_compile -m output/superpoint_100x100.xml -o output/superpoint_100x100.blob -ip U8 -VPU_MYRIAD_PLATFORM VPU_MYRIAD_2480 -VPU_NUMBER_OF_SHAVES <span class="m">4</span> -VPU_NUMBER_OF_CMX_SLICES <span class="m">4</span>
+<span class="c1"># Output model to &#34;output/superpoint_100x100.blob&#34;</span>
 </code></pre></div><p>You also will need json file called &ldquo;superpoint_100x100.json&rdquo; for the OAK device DepthAI api to use the model. This is automated in <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py">onnx conversion script</a>. This json file defines the output tensors of the model for parsing (but multiple output tensors may require more involved processing, see <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/run_oak.py">run_oak.py</a> for an example).</p>
 <p>superpoint_100x100.json</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">{
-  &#34;tensors&#34;:
-  [
-    {       
-      &#34;output_tensor_name&#34;: &#34;semi&#34;,
-      &#34;output_dimensions&#34;: [1, 65, 12, 12]
-      &#34;output_entry_iteration_index&#34;: 0,
-      &#34;output_properties_dimensions&#34;: [0],
-      &#34;property_key_mapping&#34;: [],
-      &#34;output_properties_type&#34;: &#34;f16&#34;
-    },
-    {       
-      &#34;output_tensor_name&#34;: &#34;desc&#34;,
-      &#34;output_dimensions&#34;: [1, 256, 12, 12],
-      &#34;output_entry_iteration_index&#34;: 0,
-      &#34;output_properties_dimensions&#34;: [0],
-      &#34;property_key_mapping&#34;: [],
-      &#34;output_properties_type&#34;: &#34;f16&#34;
-    },          
-  ]
-}
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;tensors&#34;</span><span class="p">:</span>
+  <span class="p">[</span>
+    <span class="p">{</span>       
+      <span class="nt">&#34;output_tensor_name&#34;</span><span class="p">:</span> <span class="s2">&#34;semi&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;output_dimensions&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+      <span class="nt">&#34;output_entry_iteration_index&#34;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&#34;output_properties_dimensions&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+      <span class="nt">&#34;property_key_mapping&#34;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="nt">&#34;output_properties_type&#34;</span><span class="p">:</span> <span class="s2">&#34;f16&#34;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>       
+      <span class="nt">&#34;output_tensor_name&#34;</span><span class="p">:</span> <span class="s2">&#34;desc&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;output_dimensions&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+      <span class="nt">&#34;output_entry_iteration_index&#34;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&#34;output_properties_dimensions&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+      <span class="nt">&#34;property_key_mapping&#34;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="nt">&#34;output_properties_type&#34;</span><span class="p">:</span> <span class="s2">&#34;f16&#34;</span>
+    <span class="p">},</span>          
+  <span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div><p>I don&rsquo;t have an example output here because I couldn&rsquo;t get similar performance that I got out of the IR model. Some things to explore for this particular case might be looking at how OAK-1 does frame pre-processing as I subsample from the full frame and the OAK-1 seems like it&rsquo;s center cropping instead. Another aspect is that I notice some speed issues, and a smaller trained model would improve that aspect. (Perhaps trying using a smaller CNN and <a href="https://arxiv.org/abs/1503.02531">distilling</a>)</p>
 <h1 id="conclusion">Conclusion</h1>
 <p>I have taken the superpoint pretrained model and adapted it to function on an OAK device. I share some obstacles that may be common in the chain conversion process and provide some suggestions to tackle them. I hope that this tutorial provides a useful blueprint for deploying your own models for the OAK device or other Intel device targets.</p>
