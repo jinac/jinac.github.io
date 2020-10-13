@@ -30,7 +30,7 @@
 <meta itemprop="description" content="Tutorial for OpenVINO Chain Model Conversion">
 <meta itemprop="datePublished" content="2020-10-04T21:32:29-07:00" />
 <meta itemprop="dateModified" content="2020-10-04T21:32:29-07:00" />
-<meta itemprop="wordCount" content="1140">
+<meta itemprop="wordCount" content="1156">
 
 
 
@@ -255,7 +255,9 @@ torch.onnx.export(pt_model,               # model being run
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">python3 /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_shape [1,1,100,100] --input_model output/superpoint_100x100.onnx --output_dir output --data_type FP16
 # FP16 data type is due to the Myriad X expecting weights and layers to be fp16 ops
 # Output model file (superpoint_100x100.xml) and weights file (superpoint100x100.bin) to directory &#34;output/&#34;
-</code></pre></div><h2 id="generate-intel-ir-to-movidius-blob">Generate Intel IR to Movidius Blob</h2>
+</code></pre></div><p>We have <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/run_openvino.py">an example script</a> to use this model. We should expect an output like this:
+<img src="/post/images/2-3.gif" alt="run_openvino.py example output"></p>
+<h2 id="generate-intel-ir-to-movidius-blob">Generate Intel IR to Movidius Blob</h2>
 <p>Finally, I can now get our model in the Myriad X format.</p>
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">/opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/myriad_compile -m output/superpoint_100x100.xml -o output/superpoint_100x100.blob -ip U8 -VPU_MYRIAD_PLATFORM VPU_MYRIAD_2480 -VPU_NUMBER_OF_SHAVES 4 -VPU_NUMBER_OF_CMX_SLICES 4
 # Output model to &#34;output/superpoint_100x100.blob&#34;
