@@ -5,8 +5,7 @@
     <link>https://jinac.github.io/</link>
     <description>Recent content in HOME on John Inacay</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>© John Inacay</copyright>
+    <language>en</language>
     <lastBuildDate>Sun, 04 Oct 2020 21:32:29 -0700</lastBuildDate>
     
 	<atom:link href="https://jinac.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -29,6 +28,39 @@
       <guid>https://jinac.github.io/post/1/</guid>
       <description>A literature review group I&amp;rsquo;m a part of with former Ditto co-workers published an article of our learnings on Transformers networks. It can be found at the link below:
 https://medium.com/@deepganteam/what-are-transformers-b687f2bcdf49</description>
+    </item>
+    
+    <item>
+      <title>Resume</title>
+      <link>https://jinac.github.io/resume/</link>
+      <pubDate>Thu, 03 Sep 2020 01:08:23 -0700</pubDate>
+      
+      <guid>https://jinac.github.io/resume/</guid>
+      <description>Machine Learning Engineer, Occipital San Francisco, CA Feb 2019 - Nov 2019
+ Built tools for evaluating deep learning models for 3D room reconstruction llaborated with other team members on deep learning projects in weekly syncs Co-wrote data labeling pipeline backend in python Django framework Built and maintained tools to generate 3D mesh and extract camera and other SLAMrelated information for machine learning datasets Optimized depth inference deep learning model with OpenVINO tools and integrated in SLAM pipeline Studied model optimization tools for weight quantization and model compression Organized deep learning paper reading group at Occipital between multiple offices across time zones Part of team working on Occipital-SCS submission to ScanNet Benchmark on 3D semantic instance benchmark Was reviewer for NeurIPS 2019  Research Engineer, Ditto Technologies San Francisco, CA Oct 2015 - Jan 2019</description>
+    </item>
+    
+    <item>
+      <title>Music</title>
+      <link>https://jinac.github.io/music/</link>
+      <pubDate>Thu, 03 Sep 2020 00:32:33 -0700</pubDate>
+      
+      <guid>https://jinac.github.io/music/</guid>
+      <description>If you want to hear some of my recordings, you can find my soundcloud here
+If you&amp;rsquo;re interested what I&amp;rsquo;m proficient in, I play:
+ Piano Bass Guitar Flute Bagpipes  </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://jinac.github.io/about/</link>
+      <pubDate>Thu, 03 Sep 2020 00:32:03 -0700</pubDate>
+      
+      <guid>https://jinac.github.io/about/</guid>
+      <description>Hi, I&amp;rsquo;m John.
+I grew up in Tampa, FL but I now live in San Francisco, CA.
+I was a Research Engineer at Ditto, a SaaS company that provides virtual try-on software in the eyewear, and a Machine Learning Engineer at Occipital, a company producing a stereo camera sensor and software for 3D sensing and SLAM. For more about this, check out my resume
+I am also a Composer and Multi-Instrumentalist.</description>
     </item>
     
   </channel>

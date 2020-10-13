@@ -1,108 +1,106 @@
 baseURL = "https://jinac.github.io/"
-languageCode = "en-us"
-title = "John Inacay"
-theme = "personal-web"
-copyright="© John Inacay"
-googleAnalytics = ""
-enableEmoji=true
-enableRobotsTXT=true
-pygmentsUseClasses=true
-pygmentsCodeFences=true
 publishDir = "../docs"
-custom_css = ["/static/override.css"]
+title = "John Inacay"
+theme = "hugo-coder-portfolio"
+DefaultContentLanguage = "en"
+paginate = 20
 
-[params.intro]
-  main = "John Inacay"
-  sub = "Computer Vision and Machine Learning Engineer, Composer and Multi-Instrumentalist"
-
-
-[params.main]
-  latestPublishHeader = "My Latest Post"
-
-[taxonomies]
-  design = "designs"
-  tech = "techs"
-
-[blackfriday]
-  hrefTargetBlank = true
+pygmentsstyle = "b2"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+pygmentsUseClasses = true
 
 [params]
-  breadcrumb = true
-  accentColor = "#FD3519"
-  mainSections = ['post'] # values: ['post', 'portfolio'] only accept one section, to be displayed bellow 404
+  author = "John Inacay"
+  description = "Yusuke Ishimi's personal website"
+  keywords = "blog,developer,personal"
+  info = "Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist"
+  avatarurl = "/images/Profile.jpeg"
+  # footercontent = "Enter a text here."
+  # fixedbarContent = "Do you want to know me more private?→"
+  # fixedbarContentAfter = "Thank You! Please share it if you like it→"
 
-[params.notFound]
-  gopher = "/images/gopher.png" # checkout https://gopherize.me/
-  h1 = 'Bummer!'
-  p = "It seems that this page doesn't exist."
+  hideCredits = false
+  hideCopyright = false
 
-[params.sections]
-  # Define how your sections will be called
-  # when automatically pulled. For instance in the 404 page
-  post = "article"
+  # Bottom sns share
+  snsShare = false
+  # Popular sns share
+  # if you want add sns. please message!
+  enableTwitterShare = false
+  enableFacebookShare = false
+  enableHatenaShare = false
+  enableLineShare = false
+  enableLinkedInShare = false
 
-[params.sidebar]
-  backgroundImage = '/images/Background.jpg'
-  gradientOverlay = '' # default: rgba(0,0,0,0.4),rgba(0,0,0,0.4)
-  logo = "/images/Profile.jpeg"
-[params.assets]
-  favicon = ""
-  customCSS = ""
+  thumbnail = "images/tn.png"
 
-[params.social]
-  github = "https://github.com/jinac"
-  twitter = "https://twitter.com/jincfunk"
-  linkedin = "https://www.linkedin.com/in/john-inacay-94356646/"
-  medium = "https://medium.com/@jdevinacay"
-  # youtube = "https://www.youtube.com/"
+  # Custom CSS
+  custom_css = []
 
-[params.contact]
-  email = ""
-  text= "" # text of the contact link in the sidebar. If email params.contact.email is defined
+  # Alignment of Mobile Menu items
+  itemscentered = true
 
+  # RTL support
+  rtl = false
 
-[menu]
+  langseparator = "|"
 
-[[menu.main]]
-  identifier = "about"
-  name = "About"
-  title = "About section"
-  url = "/about/"
-  weight = -120
+  [[params.social]]
+    name = "Github"
+    # icon = "fab fa-github"
+    weight = 1
+    url = "https://github.com/jinac/"
+  [[params.social]]
+    name = "Twitter"
+    # icon = "fab fa-twitter"
+    weight = 2
+    url = "https://twitter.com/jincfunk/"
+  [[params.social]]
+    name = "LinkedIn"
+    # icon = "fab fa-linkedin"
+    weight = 3
+    url = "https://www.linkedin.com/in/john-inacay-94356646/"
+  [[params.social]]
+    name = "Medium"
+    weight = 4
+    url = "https://medium.com/@jdevinacay"
+  [[params.social]]
+    name = "Soundcloud"
+    weight = 5
+    url = "https://soundcloud.com/jincfunc"
 
-[[menu.main]]
-  identifier = "music"
-  name = "Music"
-  title = "Music section"
-  url = "/music/"
-  weight = -110
+[languages]
+  [languages.en]
+    languagecode = "en"
+    languagename = "English" # The language name to be displayed in the selector.
+    title = "John Inacay"
 
-[[menu.main]]
-  identifier = "resume"
-  name = "Resume"
-  title = "Resume section"
-  url = "/resume/"
-  weight = -100
+    # You can configure the theme parameter for each language.
+    [languages.en.params]
+      author = "John Inacay"
+      info = "Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist"
+      description = "John Inacay's personal website"
+      keywords = "blog,developer,personal"
 
-[[menu.main]]
-  identifier = "blog"
-  name = "Post"
-  title = "Blog section"
-  url = "/post/"
-  weight = -90
+    [languages.en.menu] # It is possible to change the menu too.
 
-[sitemap]
-  changefreq = "monthly"
-  filename = "sitemap.xml"
-  priority = 0.5
+      [[languages.en.menu.main]]
+        name = "About"
+        weight = 1
+        url = "about"
 
-[privacy]
-  [privacy.googleAnalytics]
-    anonymizeIP = true
-    disable = true
-    respectDoNotTrack = true
-    useSessionStorage = false
-  [privacy.twitter]
-    disable = false
-    enableDNT = true
-    simple = false
+      [[languages.en.menu.main]]
+        name = "Blog"
+        weight = 2
+        url = "post"
+
+      [[languages.en.menu.main]]
+        name = "Music"
+        weight = 3
+        url = "music"
+
+      [[languages.en.menu.main]]
+        name = "Resume"
+        weight = 5
+        url = "resume"

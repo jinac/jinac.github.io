@@ -5,62 +5,44 @@
   <url>
     <loc>https://jinac.github.io/post/2/</loc>
     <lastmod>2020-10-04T21:32:29-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://jinac.github.io/</loc>
     <lastmod>2020-10-04T21:32:29-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://jinac.github.io/post/1/</loc>
     <lastmod>2020-09-03T01:17:05-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://jinac.github.io/resume/</loc>
     <lastmod>2020-09-03T01:08:23-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://jinac.github.io/post/</loc>
     <lastmod>2020-09-03T00:53:47-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://jinac.github.io/music/</loc>
     <lastmod>2020-09-03T00:32:33-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://jinac.github.io/about/</loc>
     <lastmod>2020-09-03T00:32:03-07:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://jinac.github.io/designs/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://jinac.github.io/categories/</loc>
   </url>
   
   <url>
-    <loc>https://jinac.github.io/techs/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://jinac.github.io/tags/</loc>
   </url>
   
 </urlset>
