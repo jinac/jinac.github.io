@@ -30,7 +30,7 @@
 <meta itemprop="description" content="Tutorial for OpenVINO Chain Model Conversion">
 <meta itemprop="datePublished" content="2020-10-04T21:32:29-07:00" />
 <meta itemprop="dateModified" content="2020-10-04T21:32:29-07:00" />
-<meta itemprop="wordCount" content="1156">
+<meta itemprop="wordCount" content="1237">
 
 
 
@@ -46,7 +46,7 @@
   <div class="intro">
     <div class="logo-container">
       <a href="/">
-        <img src='https://jinac.github.io/images/Profile.jpeg' alt="Profile HOME" class="rounded-logo">
+        <img src='https://jinac.github.io/images/Profile.jpeg' alt="Profile About" class="rounded-logo">
       </a>
     </div>
     <h2>John Inacay</h2>
@@ -230,7 +230,7 @@ print(&#39;Total number of params: &#39;, pytorch_total_params)
 # Initialize model with the pretrained weights
 map_location = lambda storage, loc: storage
 if torch.cuda.is_available():
-    map_location = None
+  map_location = None
 pt_model.load_state_dict(torch.load(weights_path, map_location=map_location))
 pt_model.eval()
 
@@ -240,15 +240,16 @@ torch_out = pt_model(x)
 
 # Export the model
 onnx_filename = os.path.join(output_dir, &#34;superpoint_{}x{}.onnx&#34;.format(h, w))
-torch.onnx.export(pt_model,               # model being run
-                  x,                         # model input (or a tuple for multiple inputs)
-                  onnx_filename,   # where to save the model (can be a file or file-like object)
-                  export_params=True,        # store the trained parameter weights inside the model file
-                  opset_version=10,          # the ONNX version to export the model to
-                  do_constant_folding=True,  # whether to execute constant folding for optimization
-                  input_names = [&#39;input&#39;],   # the model&#39;s input names
-                  output_names = [&#39;semi&#39;, &#39;desc&#39;], # the model&#39;s output names
-                  )
+torch.onnx.export(
+  pt_model,               # model being run
+  x,                         # model input (or a tuple for multiple inputs)
+  onnx_filename,   # where to save the model (can be a file or file-like object)
+  export_params=True,        # store the trained parameter weights inside the model file
+  opset_version=10,          # the ONNX version to export the model to
+  do_constant_folding=True,  # whether to execute constant folding for optimization
+  input_names = [&#39;input&#39;],   # the model&#39;s input names
+  output_names = [&#39;semi&#39;, &#39;desc&#39;], # the model&#39;s output names
+  )
 # Output ONNX model is saved to &#34;output/superpoint_100x100.onnx&#34;, expecting an input image of [1,1,100,100]
 </code></pre></div><h2 id="convert-onnx-model-to-intel-intermediate-representation-ir">Convert ONNX Model to Intel Intermediate Representation (IR)</h2>
 <p>Now that I have an ONNX model, I need to convert it to Intel&rsquo;s IR. This IR can be used as is if targeting other devices and will serve as the input to a final step of converting to the Movidius Blob to be run on the Myriad X. I will use the OpenVINO model optimizer tools. Assuming OpenVINO is installed in /opt/intel/openvino, the following script would need to be run:</p>
@@ -264,27 +265,28 @@ torch.onnx.export(pt_model,               # model being run
 </code></pre></div><p>You also will need json file called &ldquo;superpoint_100x100.json&rdquo; for the OAK device DepthAI api to use the model. This is automated in <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/convert_onnx.py">onnx conversion script</a>. This json file defines the output tensors of the model for parsing (but multiple output tensors may require more involved processing, see <a href="https://github.com/jinac/superpoint_infer_engine/blob/master/run_oak.py">run_oak.py</a> for an example).</p>
 <p>superpoint_100x100.json</p>
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">{
-    &#34;tensors&#34;:
-    [
-        {       
-            &#34;output_tensor_name&#34;: &#34;semi&#34;,
-            &#34;output_dimensions&#34;: [1, 65, 12, 12]
-            &#34;output_entry_iteration_index&#34;: 0,
-            &#34;output_properties_dimensions&#34;: [0],
-            &#34;property_key_mapping&#34;: [],
-            &#34;output_properties_type&#34;: &#34;f16&#34;
-        },
-        {       
-            &#34;output_tensor_name&#34;: &#34;desc&#34;,
-            &#34;output_dimensions&#34;: [1, 256, 12, 12],
-            &#34;output_entry_iteration_index&#34;: 0,
-            &#34;output_properties_dimensions&#34;: [0],
-            &#34;property_key_mapping&#34;: [],
-            &#34;output_properties_type&#34;: &#34;f16&#34;
-        },          
-    ]
+  &#34;tensors&#34;:
+  [
+    {       
+      &#34;output_tensor_name&#34;: &#34;semi&#34;,
+      &#34;output_dimensions&#34;: [1, 65, 12, 12]
+      &#34;output_entry_iteration_index&#34;: 0,
+      &#34;output_properties_dimensions&#34;: [0],
+      &#34;property_key_mapping&#34;: [],
+      &#34;output_properties_type&#34;: &#34;f16&#34;
+    },
+    {       
+      &#34;output_tensor_name&#34;: &#34;desc&#34;,
+      &#34;output_dimensions&#34;: [1, 256, 12, 12],
+      &#34;output_entry_iteration_index&#34;: 0,
+      &#34;output_properties_dimensions&#34;: [0],
+      &#34;property_key_mapping&#34;: [],
+      &#34;output_properties_type&#34;: &#34;f16&#34;
+    },          
+  ]
 }
-</code></pre></div><h1 id="conclusion">Conclusion</h1>
+</code></pre></div><p>I don&rsquo;t have an example output here because I couldn&rsquo;t get similar performance that I got out of the IR model. Some things to explore for this particular case might be looking at how OAK-1 does frame pre-processing as I subsample from the full frame and the OAK-1 seems like it&rsquo;s center cropping instead. Another aspect is that I notice some speed issues, and a smaller trained model would improve that aspect. (Perhaps trying using a smaller CNN and <a href="https://arxiv.org/abs/1503.02531">distilling</a>)</p>
+<h1 id="conclusion">Conclusion</h1>
 <p>I have taken the superpoint pretrained model and adapted it to function on an OAK device. I share some obstacles that may be common in the chain conversion process and provide some suggestions to tackle them. I hope that this tutorial provides a useful blueprint for deploying your own models for the OAK device or other Intel device targets.</p>
 
 
