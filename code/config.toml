@@ -12,7 +12,7 @@ pygmentsUseClasses = true
 
 [params]
   author = "John Inacay"
-  description = "Yusuke Ishimi's personal website"
+  description = "John Inacay's personal website"
   keywords = "blog,developer,personal"
   info = "Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist"
   avatarurl = "/images/Profile.jpeg"
