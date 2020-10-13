@@ -1,106 +1,62 @@
 baseURL = "https://jinac.github.io/"
+languageCode = "en-us"
+theme = "hugo-theme-hello-friend"
 publishDir = "../docs"
-title = "John Inacay"
-theme = "hugo-coder-portfolio"
-DefaultContentLanguage = "en"
-paginate = 20
-
-pygmentsstyle = "b2"
-pygmentscodefences = true
-pygmentscodefencesguesssyntax = true
-pygmentsUseClasses = true
+paginate = 5
 
 [params]
-  author = "John Inacay"
-  description = "John Inacay's personal website"
-  keywords = "blog,developer,personal"
-  info = "Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist"
-  avatarurl = "/images/Profile.jpeg"
-  # footercontent = "Enter a text here."
-  # fixedbarContent = "Do you want to know me more private?→"
-  # fixedbarContentAfter = "Thank You! Please share it if you like it→"
+  # dir name of your blog content (default is `content/posts`)
+  contentTypeName = "post"
 
-  hideCredits = false
-  hideCopyright = false
+  # "light" or "dark"
+  defaultTheme = "dark"
 
-  # Bottom sns share
-  snsShare = false
-  # Popular sns share
-  # if you want add sns. please message!
-  enableTwitterShare = false
-  enableFacebookShare = false
-  enableHatenaShare = false
-  enableLineShare = false
-  enableLinkedInShare = false
+  # if you set this to 0, only submenu trigger will be visible
+  showMenuItems = 5
 
-  thumbnail = "images/tn.png"
+  # Enable to show reading time in minutes for posts
+  showReadingTime = false
 
-  # Custom CSS
-  custom_css = []
-
-  # Alignment of Mobile Menu items
-  itemscentered = true
-
-  # RTL support
-  rtl = false
-
-  langseparator = "|"
-
-  [[params.social]]
-    name = "Github"
-    # icon = "fab fa-github"
-    weight = 1
-    url = "https://github.com/jinac/"
-  [[params.social]]
-    name = "Twitter"
-    # icon = "fab fa-twitter"
-    weight = 2
-    url = "https://twitter.com/jincfunk/"
-  [[params.social]]
-    name = "LinkedIn"
-    # icon = "fab fa-linkedin"
-    weight = 3
-    url = "https://www.linkedin.com/in/john-inacay-94356646/"
-  [[params.social]]
-    name = "Medium"
-    weight = 4
-    url = "https://medium.com/@jdevinacay"
-  [[params.social]]
-    name = "Soundcloud"
-    weight = 5
-    url = "https://soundcloud.com/jincfunc"
+  # Show table of contents at the top of your posts (defaults to false)
+  # Alternatively, add this param to post front matter for specific posts
+  # toc = true
 
 [languages]
   [languages.en]
-    languagecode = "en"
-    languagename = "English" # The language name to be displayed in the selector.
     title = "John Inacay"
+    subtitle = "Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist"
+    keywords = ""
+    copyright = ""
+    menuMore = "Show more"
+    writtenBy = "Written by"
+    readMore = "Read more"
+    readOtherPosts = "Read other posts"
+    newerPosts = "Newer posts"
+    olderPosts = "Older posts"
+    minuteReadingTime = "min read"
+    dateFormatSingle = "2006-01-02"
+    dateFormatList = "2006-01-02"
 
-    # You can configure the theme parameter for each language.
-    [languages.en.params]
-      author = "John Inacay"
-      info = "Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist"
-      description = "John Inacay's personal website"
-      keywords = "blog,developer,personal"
+    [languages.en.params.logo]
+      logoText = "John Inacay"
+      logoHomeLink = "/"
+      # path = "/images/Profile.jpeg"
+      # alt = "John Inacay"
 
-    [languages.en.menu] # It is possible to change the menu too.
-
+    [languages.en.menu]
       [[languages.en.menu.main]]
+        identifier = "about"
         name = "About"
-        weight = 1
-        url = "about"
-
+        url = "/about/"
       [[languages.en.menu.main]]
-        name = "Blog"
-        weight = 2
-        url = "post"
-
+        identifier = "blog"
+        name = "Post"
+        url = "/post/"
       [[languages.en.menu.main]]
+        identifier = "music"
         name = "Music"
-        weight = 3
-        url = "music"
-
+        url = "/music/"
       [[languages.en.menu.main]]
+        identifier = "resume"
         name = "Resume"
-        weight = 5
-        url = "resume"
+        url = "/resume/"
