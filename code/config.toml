@@ -50,7 +50,7 @@ paginate = 5
         url = "/about/"
       [[languages.en.menu.main]]
         identifier = "blog"
-        name = "Post"
+        name = "Blog"
         url = "/post/"
       [[languages.en.menu.main]]
         identifier = "music"
