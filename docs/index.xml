@@ -9,10 +9,50 @@
     <description>Recent content in HOME on John Inacay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 04 Oct 2020 21:32:29 -0700</lastBuildDate>
+    <lastBuildDate>Sat, 27 Mar 2021 23:58:18 -0700</lastBuildDate>
     
 	<atom:link href="https://jinac.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Creating a Face Multitask Dataset</title>
+      <link>https://jinac.github.io/post/4/</link>
+      <pubDate>Sat, 27 Mar 2021 23:58:18 -0700</pubDate>
+      
+      <guid>https://jinac.github.io/post/4/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Old-School Computer Vision to Extract Baseball Stats</title>
+      <link>https://jinac.github.io/post/3/</link>
+      <pubDate>Sat, 27 Mar 2021 23:48:13 -0700</pubDate>
+      
+      <guid>https://jinac.github.io/post/3/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Introduction During the COVID-19 Pandemic, a friend of mine started running a virtual baseball season simulation to fill the void when the MLB was shut down before agreeing to the shortened season. He approached me to look to see if we could use devise some OCR solution to automatically extract the stats from the top player screens. The intention was to steamline getting this information since it was being done by hand.
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Adapting the Superpoint Pytorch Model for OAK-1</title>
