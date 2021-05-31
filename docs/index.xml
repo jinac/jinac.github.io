@@ -9,10 +9,30 @@
     <description>Recent content in HOME on John Inacay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 27 Mar 2021 23:58:18 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 31 May 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://jinac.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Old-School Computer Vision to Extract Baseball Stats</title>
+      <link>https://jinac.github.io/post/3/</link>
+      <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://jinac.github.io/post/3/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Sometimes you just want to keep things shallow
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Creating a Face Multitask Dataset</title>
@@ -29,26 +49,6 @@
         
         
           
-          
-        
-        </description>
-    </item>
-    
-    <item>
-      <title>Old-School Computer Vision to Extract Baseball Stats</title>
-      <link>https://jinac.github.io/post/3/</link>
-      <pubDate>Sat, 27 Mar 2021 23:48:13 -0700</pubDate>
-      
-      <guid>https://jinac.github.io/post/3/</guid>
-      <description>
-        
-          
-          
-          
-        
-        
-        
-          Sometimes you just want to keep things shallow
           
         
         </description>
