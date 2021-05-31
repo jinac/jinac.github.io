@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Old-School Computer Vision to Extract Baseball Stats ::
+        John Inacay — Computer Vision and Machine Learning Engineer // Composer and Multi-Instrumentalist
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Introduction During the COVID-19 Pandemic, a friend of mine started running a virtual baseball season simulation to fill the void when the MLB was shut down before agreeing to the shortened season. He approached me to look to see if we could use devise some OCR solution to automatically extract the stats from the top player screens. The intention was to steamline getting this information since it was being done by hand."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://jinac.github.io/post/3/" />
+
+
+
+
+
+<link rel="stylesheet" href="https://jinac.github.io/assets/style.css" />
+
+<link rel="stylesheet" href="https://jinac.github.io/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://jinac.github.io/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://jinac.github.io/img/favicon.png" />
+
+
+<link href="https://jinac.github.io/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://jinac.github.io/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://jinac.github.io/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://jinac.github.io/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://jinac.github.io/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://jinac.github.io/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Old-School Computer Vision to Extract Baseball Stats"/>
+<meta name="twitter:description" content="Introduction During the COVID-19 Pandemic, a friend of mine started running a virtual baseball season simulation to fill the void when the MLB was shut down before agreeing to the shortened season. He approached me to look to see if we could use devise some OCR solution to automatically extract the stats from the top player screens. The intention was to steamline getting this information since it was being done by hand."/>
+
+
+
+<meta property="og:title" content="Old-School Computer Vision to Extract Baseball Stats" />
+<meta property="og:description" content="Introduction During the COVID-19 Pandemic, a friend of mine started running a virtual baseball season simulation to fill the void when the MLB was shut down before agreeing to the shortened season. He approached me to look to see if we could use devise some OCR solution to automatically extract the stats from the top player screens. The intention was to steamline getting this information since it was being done by hand." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jinac.github.io/post/3/" />
+<meta property="article:published_time" content="2021-03-27T23:48:13-07:00" />
+<meta property="article:modified_time" content="2021-03-27T23:48:13-07:00" /><meta property="og:site_name" content="John Inacay" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >John Inacay</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/">About</a></li>
+        
+      
+        
+          <li><a href="/post/">Blog</a></li>
+        
+      
+        
+          <li><a href="/music/">Music</a></li>
+        
+      
+        
+          <li><a href="/resume/">Resume</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/">About</a></li>
+      
+    
+      
+        <li><a href="/post/">Blog</a></li>
+      
+    
+      
+        <li><a href="/music/">Music</a></li>
+      
+    
+      
+        <li><a href="/resume/">Resume</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Old-School Computer Vision to Extract Baseball Stats</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-03-27
+        </span>
+
+        
+          
+        
+      
+
+      
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+        <h2>Table of Contents</h2>
+        <aside class="table-of-contents"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#data">Data</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#extracting-characters">Extracting Characters</a></li>
+    <li><a href="#simplified-ocr">Simplified OCR</a>
+      <ul>
+        <li><a href="#digit-classifier">Digit Classifier</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></aside>
+      
+      <h1 id="introduction">Introduction</h1>
+<p>During the COVID-19 Pandemic, a friend of mine started running a <a href="https://divergentleague.com/">virtual baseball season simulation</a> to fill the void when the MLB was shut down before agreeing to the shortened season. He approached me to look to see if we could use devise some OCR solution to automatically extract the stats from the top player screens. The intention was to steamline getting this information since it was being done by hand. All code for this project can be found <a href="https://github.com/jinac/MLB20_OCR">here</a>.</p>
+<h1 id="the-problem">The Problem</h1>
+<p>I narrow down the task to extract the characters from the specific game screens and leave automating around the game for another day or coder. I was given a screen capture of the desktop with a window displaying the game screen:</p>
+<h2 id="data">Data</h2>
+<p>
+  <figure class="left" >
+    <img src="/post/images/3-1.jpg"   />
+    
+      <figcaption class="center" >Example Non-Pitcher Stats Screen</figcaption>
+    
+  </figure>
+
+
+
+  <figure class="left" >
+    <img src="/post/images/3-2.jpg"   />
+    
+      <figcaption class="center" >Example Pitcher Stats Screen</figcaption>
+    
+  </figure>
+
+</p>
+<p>One problem is that this is not a lot of data. The variance in pixels means we shouldn&rsquo;t be precise in the pixel locations if we choose to crop or make decisions based on x-y location of objects, especially if this is not a completely accurate representation of the capture method (I think a production version would work directly on the screen capture, not multiple layers of screen capture on a Mac).
+Another problem is we can already see that some variation with players being displayed behind the stats could cause some issues with filtering techniques.</p>
+<h1 id="solution">Solution</h1>
+<p>I chose to use more traditional computer vision techniques instead of directly going to deep learning. While we may get good results using something off-the-shelf for OCR, I wanted to keep things simpler. We make the assumption the user will crop to the stats panel as an input to the algorithm. Given the input image, we transform it to grayscale, apply pixel value thresholding, and do some minor morphological cleanup. We then used connected components to group pixels into blobs that should be characters. Given these groups, we crop them and classify them with features that we come up with from the characters in the data images (that we split into training-testing sets). The output should be the stats with the appropriate headings depending on the input being a pitcher or non-pitcher because the stats are different.
+Many of these techniques required some hand-tuning, and I kept those experiments in an <a href="https://github.com/jinac/MLB20_OCR/blob/main/MLBScreenOCR.ipynb">ipython notebook</a>. The final script is <a href="https://github.com/jinac/MLB20_OCR/blob/main/extract_stats.py">extract_stats.py</a></p>
+<h2 id="extracting-characters">Extracting Characters</h2>
+<p>We extract characters with fairly conventional techniques. We first crop to the stats panel. We do not automate this as we expect the user to set this crop region that can be reused on a batch of screen captures.
+
+  <figure class="left" >
+    <img src="/post/images/3-3.jpg"   />
+    
+      <figcaption class="center" >Cropped Panel Non-pitcher</figcaption>
+    
+  </figure>
+
+
+
+  <figure class="left" >
+    <img src="/post/images/3-4.jpg"   />
+    
+      <figcaption class="center" >Cropped Panel Pitcher</figcaption>
+    
+  </figure>
+
+</p>
+<p>We then use binary thresholding to get this:
+
+  <figure class="left" >
+    <img src="/post/images/3-5.jpg"   />
+    
+      <figcaption class="center" >Threshold Panel of Non-pitcher (left) and Pitcher (right)</figcaption>
+    
+  </figure>
+
+</p>
+<p>We use connected components to get character blobs, and we create a histogram of thresholded pixels. We can use the histogram to make a decision of splitting up. We filter for the large number characters (and ignore small text as we have other clues to figuring out if the panel is for a pitcher and non-pitcher).
+
+  <figure class="left" >
+    <img src="/post/images/3-6.jpg"   />
+    
+      <figcaption class="center" >Histogram for data (img1: non-pitcher, img2: pitcher)</figcaption>
+    
+  </figure>
+
+</p>
+<p>And we finally get a bounding box from these pixel groups:
+
+  <figure class="left" >
+    <img src="/post/images/3-7.jpg"   />
+    
+      <figcaption class="center" >Initial panel with character bounding boxes (non-pitcher: left, pitcher: right)</figcaption>
+    
+  </figure>
+
+</p>
+<h2 id="simplified-ocr">Simplified OCR</h2>
+<p>With the extracted characters, we want to classify them as 1 of 12 characters (digits 0-9, &ldquo;.&rdquo;, &ldquo;-&quot;). We approach with a sort of decision tree. There are 2 features we consider: character relative dimensions, and occupancy grid. Character relative dimensions is our first filter where we can classify outright as a &ldquo;-&rdquo;, &ldquo;.&rdquo;, or a 1. This feature is calculated as the height of bounding box divided by the width of the bounding of the character. The 3 classes we classify outright have a strong correlation to this feature, but the digits 0, 2-9 are too similar to differentiate well. We then search for another set of features to classify.</p>
+<h3 id="digit-classifier">Digit Classifier</h3>
+<p>While we call it an occupancy grid, we essentially are performing a downsampling of the cropped image to a 10 x 3 grid. We then compare this downsampled, cropped image to an example of each character. Both images use a binary set of {-1, 1} instead of {0, 1}. We then perform a dot product between the cropped image to each example as the comparison. The values ensures shared values indicate higher similarity and mismatches reduce similarity. We pick the class that has the highest dot product value as similarity. The classifier code can be seen in <a href="https://github.com/jinac/MLB20_OCR/blob/main/classify.py">classify.py</a></p>
+<h1 id="future-work">Future Work</h1>
+<p>The code was shared on github and made available to friend to try out. As far as further automation, this code can be used in a larger automation system to capture the images, and some work can be done to handle OCR of more text characters and work on automatically extracting the player&rsquo;s name as additional output data. I would also think that further testing would need to be made. Two images may not be enough to have picked the right tuned values for some of the filtering stages. For example, we had to tune to the alpha blending of the player behind the panel, and we did not have enough data to test against variations of skin color and jersey that could disrupt some stages of the algorithm.</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://jinac.github.io/post/4/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Creating a Face Multitask Dataset</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://jinac.github.io/post/2/">
+                  <span class="button__text">Adapting the Superpoint Pytorch Model for OAK-1</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >John Inacay</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+        <span
+          >© 2021 Powered by
+          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span
+        >
+        <span
+          >Theme created by
+          <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span
+        >
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://jinac.github.io/assets/main.js"></script>
+<script src="https://jinac.github.io/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>
