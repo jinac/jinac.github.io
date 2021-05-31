@@ -214,7 +214,7 @@
 <h2 id="data">Data</h2>
 <p>
   <figure class="left" >
-    <img src="/post/images/3-1.jpg"   />
+    <img src="/post/images/3-1.png"   />
     
       <figcaption class="center" >Example Non-Pitcher Stats Screen</figcaption>
     
@@ -223,7 +223,7 @@
 
 
   <figure class="left" >
-    <img src="/post/images/3-2.jpg"   />
+    <img src="/post/images/3-2.png"   />
     
       <figcaption class="center" >Example Pitcher Stats Screen</figcaption>
     
@@ -239,7 +239,7 @@ Many of these techniques required some hand-tuning, and I kept those experiments
 <p>We extract characters with fairly conventional techniques. We first crop to the stats panel. We do not automate this as we expect the user to set this crop region that can be reused on a batch of screen captures.
 
   <figure class="left" >
-    <img src="/post/images/3-3.jpg"   />
+    <img src="/post/images/3-3.png"   />
     
       <figcaption class="center" >Cropped Panel Non-pitcher</figcaption>
     
@@ -248,7 +248,7 @@ Many of these techniques required some hand-tuning, and I kept those experiments
 
 
   <figure class="left" >
-    <img src="/post/images/3-4.jpg"   />
+    <img src="/post/images/3-4.png"   />
     
       <figcaption class="center" >Cropped Panel Pitcher</figcaption>
     
@@ -258,7 +258,7 @@ Many of these techniques required some hand-tuning, and I kept those experiments
 <p>We then use binary thresholding to get this:
 
   <figure class="left" >
-    <img src="/post/images/3-5.jpg"   />
+    <img src="/post/images/3-5.png"   />
     
       <figcaption class="center" >Threshold Panel of Non-pitcher (left) and Pitcher (right)</figcaption>
     
@@ -268,7 +268,7 @@ Many of these techniques required some hand-tuning, and I kept those experiments
 <p>We use connected components to get character blobs, and we create a histogram of thresholded pixels. We can use the histogram to make a decision of splitting up. We filter for the large number characters (and ignore small text as we have other clues to figuring out if the panel is for a pitcher and non-pitcher).
 
   <figure class="left" >
-    <img src="/post/images/3-6.jpg"   />
+    <img src="/post/images/3-6.png"   />
     
       <figcaption class="center" >Histogram for data (img1: non-pitcher, img2: pitcher)</figcaption>
     
@@ -278,7 +278,7 @@ Many of these techniques required some hand-tuning, and I kept those experiments
 <p>And we finally get a bounding box from these pixel groups:
 
   <figure class="left" >
-    <img src="/post/images/3-7.jpg"   />
+    <img src="/post/images/3-7.png"   />
     
       <figcaption class="center" >Initial panel with character bounding boxes (non-pitcher: left, pitcher: right)</figcaption>
     
@@ -304,10 +304,17 @@ Many of these techniques required some hand-tuning, and I kept those experiments
           </div>
           <div class="pagination__buttons">
             
+              <span class="button previous">
+                <a href="https://jinac.github.io/post/4/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Creating a Face Multitask Dataset</span>
+                </a>
+              </span>
+            
             
               <span class="button next">
-                <a href="https://jinac.github.io/post/4/">
-                  <span class="button__text">Creating a Face Multitask Dataset</span>
+                <a href="https://jinac.github.io/post/2/">
+                  <span class="button__text">Adapting the Superpoint Pytorch Model for OAK-1</span>
                   <span class="button__icon">→</span>
                 </a>
               </span>

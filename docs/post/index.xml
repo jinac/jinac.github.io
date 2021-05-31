@@ -15,6 +15,26 @@
     
     
     <item>
+      <title>Creating a Face Multitask Dataset</title>
+      <link>https://jinac.github.io/post/4/</link>
+      <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://jinac.github.io/post/4/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Manufacturing a datset and building a dataset loader
+          
+        
+        </description>
+    </item>
+    
+    <item>
       <title>Old-School Computer Vision to Extract Baseball Stats</title>
       <link>https://jinac.github.io/post/3/</link>
       <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
@@ -29,26 +49,6 @@
         
         
           Sometimes you just want to keep things shallow
-          
-        
-        </description>
-    </item>
-    
-    <item>
-      <title>Creating a Face Multitask Dataset</title>
-      <link>https://jinac.github.io/post/4/</link>
-      <pubDate>Sat, 27 Mar 2021 23:58:18 -0700</pubDate>
-      
-      <guid>https://jinac.github.io/post/4/</guid>
-      <description>
-        
-          
-          
-          
-        
-        
-        
-          
           
         
         </description>
